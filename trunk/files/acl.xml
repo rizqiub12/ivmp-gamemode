@@ -1,0 +1,38 @@
+<acl>
+	<aclgroup id='1' name='Default' >
+		<command name='pm' />
+	</aclgroup>
+	<aclgroup id='2' name='Moderator' >
+		<command name='slap' />
+		<command name='warn' />
+		<command name='freeze' />
+		<command name='unfreeze' />
+		<command name='kick' />
+		<command name='sethealth' />
+		<command name='setarmour' />
+		<command name='mute' />
+		<command name='unmute' />
+		<command name='warp' />
+		<command name='akill' />
+		<command name='givemoney' />
+		<command name='giveweapon' />
+		<command name='goto' />
+		<command name='dv' />
+		<command name='setteam' />
+		<command name='setchannel' />
+	</aclgroup>
+	<aclgroup id='3' name='Admin' >
+		<command name='ban' />
+		<command name='startmap' />
+		<command name='stopmap' />
+		<command name='loadmap' />
+		<command name='reloadmaps' />
+		<command name='createteam' />
+		<command name='deleteteam' />
+		<command name='createchannel' />
+		<command name='deletechannel' />
+	</aclgroup>
+	<aclgroup id='4' name='Leader' >
+		<command name='setmode' />
+	</aclgroup>
+</acl>

@@ -1,0 +1,24 @@
+#summary Main Wiki Page
+
+= Introduction =
+
+Welcome to TheGhost's open source ivmp project. I would like to thank you for your interest in using this code for your server and community. The goal is to provide a quality set of tools to allow servers to build and customize incredible servers for IVMP. I am always open for additional people to join the project, whether helping keep the documentation up to date or putting together bug fixes. Please do not hesitate from posting in the issues section. I value input and everyone's contributions.
+
+= Features =
+
+The following is a list of features provided by ivmp-gamemode and its documentation:
+
+  * [Mapping Map System]
+  * [ACS Admin Control System]
+  * [Commands Command Handling]
+  * [Accounts Advanced Accounts]
+  * [ChatServer Chat Server]
+  * [Debugmode Development Mode]
+  * [Gamemodes Gamemodes]
+  * [Usergroups Usergroups]
+  * [Elements Entities]
+
+The following is a list of events, functions, and commands built into the script and can be used scripters as needed.
+
+  * [Functions]
+  * [Events]
