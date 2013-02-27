@@ -1,0 +1,58 @@
+#summary One-sentence summary of this page.
+
+= Functions =
+
+== Server ==
+
+  * [regsterCommand]
+
+== Player ==
+
+  * [spawnPlayer]
+  * [getRandomPlayer]
+  * [isPlayerMuted]
+
+== Elements ==
+
+  * [createElement]
+  * [getElementPosition]
+  * [setElementPosition]
+  * [getElementType]
+  * [getElementsByType]
+  * [getElementData]
+  * [setElemetnData]
+
+== Accounts ==
+
+  * [getAccount]
+  * [getAccounts]
+  * [isAccount]
+  * [getAccountPassword]
+  * [setAccountPassword]
+  * [addAccount]
+  * [loginPlayer]
+  * [logoutPlayer]
+
+== Usergroups ==
+
+  * [setPlayerUsergroup]
+  * [getPlayerUsergroup]
+  * [getPlayersInUsergroup]
+  * [countPlayersInUsergroup]
+  * [getUsergroupFromName]
+  * [getUsergroupName]
+  * [setUsergroupName]
+
+== Utility ==
+
+  * [getRandomNumber]
+  * [concatString]
+  * [createLogfile]
+  * [writeToLogfile]
+
+== MYSQL ==
+
+  * [mysqlConnect]
+  * [mysqlGetTable]
+  * [mysqlGetRowFromTable]
+  * [mysqlGetFieldFromRow]

@@ -1,0 +1,5 @@
+#summary The map system enables advanced file and entity integration.
+
+= Introduction =
+
+The map system allows servers to manage vehicles, objects, blips, checkpoints, pickups, spawnpoints and more through aspects such as the xml functionality of map files, the structured element system, and in-game map interaction.
