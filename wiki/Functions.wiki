@@ -11,6 +11,7 @@
   * [spawnPlayer]
   * [getRandomPlayer]
   * [isPlayerMuted]
+  * [getPlayerId]
 
 == Elements ==
 
