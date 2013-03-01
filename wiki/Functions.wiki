@@ -12,6 +12,8 @@
   * [getRandomPlayer]
   * [isPlayerMuted]
   * [getPlayerId]
+  * [getPlayerVehicle]
+  * [isPlayerDriving]
 
 == Elements ==
 
@@ -50,6 +52,7 @@
   * [concatString]
   * [createLogfile]
   * [writeToLogfile]
+  * [positionInFront]
 
 == MYSQL ==
 
