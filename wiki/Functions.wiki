@@ -35,6 +35,13 @@
   * [addAccount]
   * [loginPlayer]
   * [logoutPlayer]
+  
+== Maps ==
+
+  * [loadMap]
+  * [unloadMap]
+  * [startMap]
+  * [stopMap]
 
 == Usergroups ==
 
