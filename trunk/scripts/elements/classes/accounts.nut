@@ -34,13 +34,13 @@ class AccountHandler
 	mt_accounts = [ ];
 	
 	constructor ( )
-	{
-		local usertable = SERVER.getconfig ( ).usertable;
-		local grouptable = SERVER.getconfig ( ).grouptable;
-		local statstable = SERVER.getconfig ( ).statstable;
-		
+	{		
 		if ( SERVER.getconfig ( ).acctype.tointeger ( ) == 0 )
 		{
+			local usertable = SERVER.getconfig ( ).usertable;
+			local grouptable = SERVER.getconfig ( ).grouptable;
+			local statstable = SERVER.getconfig ( ).statstable;
+			
 			if ( SERVER.getconfig ( ).dbtype.tointeger ( ) == 0 )
 			{
 				sql.create_table( usertable, [
@@ -71,6 +71,18 @@ class AccountHandler
 					{ name = "exp", type = "tinyint(3) unsigned", defaultv = 0 }
 				] );
 			}
+		}
+		else if ( SERVER.getconfig ( ).acctype.tointeger ( ) == 1 )
+		{
+		
+		}
+		else if ( SERVER.getconfig ( ).acctype.tointeger ( ) == 2 )
+		{
+		
+		}
+		else if ( SERVER.getconfig ( ).acctype.tointeger ( ) == 3 )
+		{
+		
 		}
 	}
 	

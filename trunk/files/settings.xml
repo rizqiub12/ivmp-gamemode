@@ -14,7 +14,7 @@
 			grouptable -> table where usergroups/teams are stored
 			statstable -> player stats, not really in use yet though
 		-->
-		<database type='0' ip='localhost' user='root' pass='GhostAD2008' db='ghostgaming' usertable='users' grouptable='usergroups' statstable='userstats' />
+		<database type='0' ip='localhost' user='root' pass='' db='ivmp' usertable='users' grouptable='usergroups' statstable='userstats' />
 		
 		<!-- This node is only loaded when account node type is equal to 1. Load the xml file with accounts. -->
 		<xmlfile >accounts.xml</xmlfile>
