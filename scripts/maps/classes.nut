@@ -405,9 +405,7 @@ class Map extends Element
 	function randomspawnpoint ( )
 	{
 		local n = this.spawnpoints.len ( );
-		log ( n.tostring ( ) + "!!!!!!!!" );
 		local num = SERVER.math.random ( 1, n );
-		log ( num.tostring ( ) );
 		return spawnpoints [ num - 1 ];
 	}
 	
@@ -417,9 +415,7 @@ class Map extends Element
 		switch ( element_type )
 		{
 			case "vehicle":
-				local vehicle = Vehicle ( data );
-				vehicles.push ( vehicle );
-				return vehicle;
+				return vehicles.push ( Vehicle ( data ) );
 				break;
 			case "object":
 				return objects.push ( Object ( data ) );
@@ -428,10 +424,7 @@ class Map extends Element
 				return blips.push ( Blip ( data ) );
 				break;
 			case "checkpoint":
-				local checkpoint = Checkpoint ( data )
-				checkpoints.push ( checkpoint );
-				elements.checkpoints.push ( checkpoint );
-				return checkpoint;
+				return checkpoints.push ( Checkpoint ( data ) );
 				break;
 			case "pickup":
 				return pickups.push ( Pickup ( data ) );

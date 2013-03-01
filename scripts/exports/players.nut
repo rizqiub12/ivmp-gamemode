@@ -43,3 +43,26 @@ function isPlayerMuted ( player )
 	}
 	return false;
 }
+
+function positionInFront ( p, rot, r, v )
+{
+	return SERVER.math.getfrontposition ( p, rot, r, v );
+}
+
+function isPlayerDriving ( player )
+{
+	if ( player )
+	{
+		return player.isdriving ( );
+	}
+	return false;
+}
+
+function getPlayerVehicle ( player )
+{
+	if ( player )
+	{
+		return player.getvehicle ( );
+	}
+	return false;
+}

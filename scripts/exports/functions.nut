@@ -62,7 +62,7 @@ function registerCommand ( commandname, handler )
 	return true;
 }
 
-function isElement ( element )
+/*function isElement ( element )
 {
 	if ( !element.type )
 		return false;
@@ -109,6 +109,13 @@ function isElement ( element )
 			return false;
 	}
 	return false;
+}*/
+
+function isElement ( element )
+{
+	if ( element.instanceof ( Element );
+		return true;
+	return false;
 }
 
 function createElement ( element_type, a = false, b = false, c = false, d = false, e = false, f = false, g = false, h = false )
@@ -118,50 +125,78 @@ function createElement ( element_type, a = false, b = false, c = false, d = fals
 		
 	if ( typeof ( element_type ) == "string" )
 	{
+		local data = false;
 		switch ( element_type )
 		{
 			case "vehicle":
-				if ( a != false && b != false && c != false )
-					return elements.vehicles[elements.vehicles.len()] <- Vehicle ( a, b, c );
+				if ( a != false && b != false && c != false && d != false )
+					data = { 
+						model = a.tointeger ( ), 
+						x = b[0].tofloat ( ), y = b[1].tofloat ( ), z = b[2].tofloat ( ), 
+						rx = c[0].tofloat ( ), ry = c[0].tofloat ( ), rz = c[0].tofloat ( ), 
+						color = [ d[0].tointeger ( ), d[1].tointeger ( ), d[2].tointeger ( ), d[3].tointeger( ) ] 
+					};
 				break;
 			case "ped":
-				if ( a != false && b != false && c != false && d != false )
-					return elements.peds[elements.peds.len()] <- Ped ( a, b, c, d );
+				if ( a != false && b != false && c != false )
+					data = { model = a.tointeger ( ), x = b[0].tofloat ( ), y = b[1].tofloat ( ), z = b[2].tofloat ( ), rot = c.tofloat ( ) };
 				break;
 			case "pickup":
-				if ( a != false && b != false && c != false && d != false )
-					return elements.pickups[elements.pickups.len()] <- Pickup ( a, b, c, d );
+				if ( a != false && b != false )
+					data = { model = a.tointeger ( ), x = b[0].tofloat ( ), y = b[1].tofloat ( ), z = b[2].tofloat ( ) };
 				break;
 			case "house":
 				if ( a != false && b != false && c != false && d != false && e != false && f != false )
-					return elements.houses[elements.houses.len()] <- House ( elements.houses.len(), a, b, c, d, e, f );
+					return;
 				break;
 			case "blip":
-				if ( a != false && b != false && c != false && d != false )
-					return elements.blips[elements.blips.len()] <- Blip ( a, b, c, d );
+				if ( a != false && b != false )
+					data = { model = a.tointeger ( ), x = b[0].tofloat ( ), y = b[1].tofloat ( ), z = b[2].tofloat ( ) };
 				break;
 			case "checkpoint":
-				if ( a != false && b != false && c != false && d != false && e != false && f != false && g != false )
-					return elements.checkpoints[elements.checkpoints.len()] <- Checkpoint ( a, b, c, d, e, f, g );
-				break;
-			case "timer":
 				if ( a != false && b != false && c != false )
-					return elements.timers[elements.timers.len()] <- Timer ( elements.timers.len(), a, b, c );
+					data = { 
+						model = a.tointeger ( ), 
+						x = b[0].tofloat ( ), y = b[1].tofloat ( ), z = b[2].tofloat ( ) 
+						tx = c[0].tofloat ( ), ty = c[1].tofloat ( ), tz = c[2].tofloat ( )
+					};
 				break;
 			case "spawnpoint":
 				if ( a != false && b != false && c != false && d != false )
-					return elements.spawnpoints[elements.spawnpoints.len()] <- Spawnpoint ( elements.spawnpoints.len(), a, b, c, d );
+					return SERVER.getworld ( ).getmaphandler ( ).getdefault ( ).addspawnpoint ( element_type, data );
 				break;
 			case "object":
-				if ( a != false && b != false && c != false && d != false && e != false && f != false && g != false )
-					return elements.objects <- Object ( a, b, c, d, e, f, g );
+				if ( a != false && b != false && c != false )
+					data = { 
+						model = a.tointeger ( ), 
+						x = b[0].tofloat ( ), y = b[1].tofloat ( ), z = b[2].tofloat ( ) 
+						rx = c[0].tofloat ( ), ry = c[1].tofloat ( ), rz = c[2].tofloat ( )
+					};
 				break;
 			default:
 				return false;
 		}
-	}else{
-		return false;
+		return SERVER.getworld ( ).getmaphandler ( ).getdefault ( ).addelement ( element_type, data );
 	}
+	else
+		return false;
+}
+
+function getElementRotation ( element )
+{
+	if ( !isElement ( element ) )
+		return false;
+	
+	local pos;
+	switch ( element.gettype ( ) )
+	{
+		case "player":
+			pos = element.getrotation ( );
+			break;
+		default:
+			return false;
+	}
+	return pos;
 }
 
 function getElementPosition ( element )
@@ -170,7 +205,7 @@ function getElementPosition ( element )
 		return false;
 	
 	local pos;
-	switch ( element.getType ( ) )
+	switch ( element.gettype ( ) )
 	{
 		case "player":
 			pos = element.getposition ( );
@@ -182,7 +217,7 @@ function getElementPosition ( element )
 			pos = getObjectCoordinates ( element.id );
 			break;
 		case "checkpoint":
-			pos = element.getPosition();
+			pos = element.getposition ( );
 			break;
 		case "blip":
 			pos = getBlipCoordinates ( element.id );
@@ -191,7 +226,7 @@ function getElementPosition ( element )
 			pos = getPickupCoordinates ( element.id );
 			break;
 		case "house":
-			return { [0] = element.pos[0], [1] = element.pos[1], [2] = element.pos[2] };
+			return;
 			break;
 		case "spawnpoint":
 			return element.getposition ( );

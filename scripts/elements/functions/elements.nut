@@ -322,18 +322,3 @@ function deleteAllElements ( )
 		foreach ( i, r in v )
 			deleteElement ( r );
 }
-
-function isElement ( element )
-{
-	foreach ( k, v in elements )
-	{
-		foreach ( i, r in elements[k] )
-		{
-			if ( r == element )
-			{
-				return true;
-			}
-		}
-	}
-	return false;
-}
