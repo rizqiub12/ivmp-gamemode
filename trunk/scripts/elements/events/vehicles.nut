@@ -30,18 +30,3 @@ function onVehicleExitComplete ( playerid, vehicleid, seatid )
 addEvent ( "vehicleExitComplete", onVehicleExitComplete );
 addEvent ( "vehicleCreate", onVehicleCreate );
 addEvent ( "vehicleEntryComplete", onVehicleEntryComplete );
-//addEvent ( "scriptInit", 
-	/*function ( )
-	{
-		local result = sql.query_assoc ( "SELECT * FROM vehicles WHERE serverid = 1 " );
-		if ( !result )
-			return;
-		else
-		{
-			foreach ( id, vehicle in result )
-			{
-				SERVER.getworld ( ).getdefault ( ).addelement ( "vehicle", vehicle );
-			}
-		}
-	}*/
-//);

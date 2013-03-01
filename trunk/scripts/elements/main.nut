@@ -28,25 +28,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-elements <- {
-	players = { },
-	vehicles = { },
-	blips = { },
-	checkpoints = { },
-	peds = { },
-	timers = { },
-	objects = { },
-	pickups = { },
-	usergroups = { },
-	spawnpoints = { },
-	decks = { },
-	houses = { },
-	accounts = { }
-};
-
 /************************** #include **************************/
 dofile("scripts/elements/classes/includes.nut");
-dofile("scripts/elements/functions/includes.nut");
 dofile("scripts/elements/events/includes.nut");
 
 SERVER.initaccounthandler ( );

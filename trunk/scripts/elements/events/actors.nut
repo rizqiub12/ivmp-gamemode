@@ -30,7 +30,6 @@
 
 function onActorCreate ( actorid )
 {
-	log ( "Actor created: " + actorid.tostring ( ) + " Model: " + getActorModel ( actorid ).tostring ( ) );
     return true;
 }
 

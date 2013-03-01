@@ -28,13 +28,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
  
-elements <- {
-	checkpoints = [ ],
-	blips = [ ],
-	ped = [ ],
-	object = [ ]
-};
- 
 itemlist <- [
 	{ name = "wallet", type = "container" }
 ];
