@@ -42,7 +42,7 @@
   * [getPlayerUsergroup]
   * [getPlayersInUsergroup]
   * [countPlayersInUsergroup]
-  * [getUsergroupFromName]
+  * [getUsergroup]
   * [getUsergroupName]
   * [setUsergroupName]
 
