@@ -37,15 +37,12 @@ class House extends Element
 	owner = "";
 	price = 0;
 	
-	constructor ( id, x, y, z, price, password, owner )
+	constructor ( data )
 	{
-		pass = password;
-		pos[0] <- x;
-		pos[1] <- y;
-		pos[2] <- z;
-		this.owner = owner;
-		this.id = id;
-		this.price = price;
+		pos[0] <- data.x;
+		pos[1] <- data.y;
+		pos[2] <- data.z;
+		this.id = data.id;
 		type = "house";
 		
 		point = createCheckpoint ( 6, x.tofloat(), y.tofloat(), z.tofloat(), x.tofloat(), y.tofloat(), z.tofloat() - 3, 0.3 );

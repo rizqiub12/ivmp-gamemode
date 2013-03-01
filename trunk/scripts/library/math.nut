@@ -67,6 +67,12 @@ class Math
 		);
 	}
 	
+	function getfrontposition ( p, h, r, v )
+	{
+		local _p = [ r * cos ( h - 1.57079632679 ), r * sin ( h - 1.57079632679 ), v ];
+		return [ p[0] - _p[0], p[1] - _p[1], p[2] + _p[2] ];
+	}
+	
 	function hypotnuse ( a, b )
 	{
 		if ( !isnumeric ( a ) || !isnumeric ( b) )
