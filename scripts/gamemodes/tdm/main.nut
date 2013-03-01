@@ -29,7 +29,7 @@
  */
 
 // Load Map
-SERVER.getworld ( ).maphandler.loadmap ( "tdm.map", true );
+loadMap ( "tdm", true );
 
 local roundtimer = false;
 local displaytimer = false;
@@ -81,7 +81,7 @@ function onRoundStart ( )
 	{
 		if ( player )
 		{
-			player.message ( "Use /join " + teams[0].getname ( ) + " to join Team " + teams[0].getname ( ) + ", or use /join " + teams[1].getname ( ) + " to join Team " + teams[1].getname ( ) );
+			player.message ( "Use /join " + getUsergroupName ( teams[0] ) + " to join Team " + getUsergroupName ( teams[0] ) + ", or use /join " + getUsergroupName ( teams[1] ) + " to join Team " + getUsergroupName ( teams[1] ) );
 		}
 	}
 	
