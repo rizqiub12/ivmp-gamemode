@@ -13,7 +13,7 @@
 function sendMessageToNearPlayers ( player )
 {
 	local pos = getElementPosition ( player );
-	local players = getNearPlayers ( pos );
+	local players = getNearbyPlayers ( pos );
 	foreach ( _p in players )
 		sendPlayerMessage ( getPlayerId ( _p ), "You are near " + getPlayerName ( getPlayerId ( player ) ) );
 }
