@@ -368,3 +368,17 @@ function getUsergroup ( var )
 {
 	return SERVER.getusergroup ( var );
 }
+
+function getAccountUsername ( account )
+{
+	if ( isAccount ( account ) )
+	{
+		return account.getname ( );
+	}
+	return false;
+}
+
+function getPlayerAccount ( player )
+{
+	return player.getaccount ( );
+}
