@@ -23,7 +23,8 @@
   * [getElementType]
   * [getElementsByType]
   * [getElementData]
-  * [setElemetnData]
+  * [setElementData]
+  * [areElementsNearby]
 
 == Accounts ==
 
@@ -35,6 +36,8 @@
   * [addAccount]
   * [loginPlayer]
   * [logoutPlayer]
+  * [getPlayerAccount]
+  * [isPlayerLoggedIn]
   
 == Maps ==
 
@@ -60,6 +63,7 @@
   * [createLogfile]
   * [writeToLogfile]
   * [positionInFront]
+  * [getNearbyPlayers]
 
 == MYSQL ==
 

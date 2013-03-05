@@ -245,6 +245,13 @@ function isAccount ( account )
 	return SERVER.getaccounthandler ( ).getaccount ( account.getname ( ) );
 }
 
+function isPlayerLoggedIn ( player )
+{
+	if ( player.getaccount ( ) )
+		return true;
+	return false;
+}
+
 function getAccounts ( )
 {
 	return SERVER.getaccounthandler ( ).getaccounts( );
@@ -381,4 +388,27 @@ function getAccountUsername ( account )
 function getPlayerAccount ( player )
 {
 	return player.getaccount ( );
+}
+
+function getNearbyPlayers ( pos, range = 20 )
+{
+	local t = [ ];
+	
+	foreach ( player in SERVER.getworld ( ).getplayers ( ) )
+	{
+		local distance = SERVER.math.distance ( pos, player.getposition ( ) );
+		if ( typeof ( distance ) == "integer" )
+		{
+			if ( distance <= range )
+				t.push ( player );
+		}
+	}
+}
+
+function areElementsNearby ( _e1, _e2, dist = 20 )
+{
+	local d = SERVER.math.distance ( getElementPosition ( _e1 ), getElementPosition ( _e2 ) );
+	if ( d <= dist )
+		return true;
+	return false;
 }
