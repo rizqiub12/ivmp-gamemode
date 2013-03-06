@@ -31,13 +31,17 @@
   * [getAccount]
   * [getAccounts]
   * [isAccount]
-  * [getAccountPassword]
-  * [setAccountPassword]
   * [addAccount]
   * [loginPlayer]
   * [logoutPlayer]
   * [getPlayerAccount]
   * [isPlayerLoggedIn]
+  * [getAccountUsername]
+  * [setAccountUsername]
+  * [getAccountPassword]
+  * [setAccountPassword]
+  * [getAccountData]
+  * [setAccountData]
   
 == Maps ==
 
