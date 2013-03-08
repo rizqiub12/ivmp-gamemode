@@ -82,7 +82,7 @@ class Utility
 		if ( onlyDigits == false )
 			for ( local i = 0; i < length; ++i )
 			{
-				rnd = random ( 0, 35 );
+				rnd = SERVER.math.random ( 0, 35 );
 				if ( rnd < 10 )
 				{	
 					rnd += 48;
@@ -94,7 +94,7 @@ class Utility
 		else
 			for ( local i = 0; i < length; ++i )
 			{
-				rnd = random( 0, 9 );
+				rnd = SERVER.math.random( 0, 9 );
 				rnd += 48;
 				str += rnd.tochar ( );
 			}
@@ -135,7 +135,7 @@ class Utility
 		str = str.tolower ( ) + salt.tolower ( );
 		str = md5 ( str ).tolower ( );
 			
-		return [ str, salt ];
+		return [ str, salt.tolower ( ) ];
 	}
 };
 
@@ -159,7 +159,7 @@ class Serverdata
 		//EVERY 4 HOURS
 		if ( record.len ( ) == 4 )
 		{
-			//local ini = EasyINI( GetPlayerName(playerid) + ".ini");
+		
 		}
 		return true;
 	}
