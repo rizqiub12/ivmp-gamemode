@@ -54,7 +54,7 @@ function onConsoleInput ( input )
 		case "register":
 			if ( text.len ( ) != 3 )
 				return false;
-			createElement ( ID_ACCOUNT, text[1], text[2], "", "127.0.0.1" );
+			addAccount ( text[1], text[2], "hlwkjerht4", "127.0.0.2" );
 			break;
 		case "adminchat":
 			SERVER.getchatserver ( ).getchannel ( "admin" ).addchat ( "Console", input );

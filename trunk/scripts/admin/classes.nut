@@ -67,7 +67,7 @@ class ACS
 					if ( xfile.nodeName ( ) == "function" )
 					{
 						local nm = xfile.nodeAttribute ( "name" );
-						rights.functions[i].push ( nm );
+						rights.functions[i].push ( [ nm, i ] );
 					}
 							
 					else if ( xfile.nodeName ( ) == "command" )
@@ -77,6 +77,7 @@ class ACS
 					}
 					x = xfile.nodeNext ( );
 				}
+				
 				xfile.nodeParent ( );
 			}
 			
@@ -115,6 +116,12 @@ class ACS
 			{
 				if ( right.find ( name ) )
 					level = id;
+					
+				foreach ( t, g in right )
+				{
+					if ( g[0] == name )
+						level = g[1];
+				}
 			}
 		}
 		else if ( type == 1 )
@@ -288,14 +295,16 @@ class ACS
 	{
 		//joinChatChannel ( player, chatchannel );
 		if ( !player.getchatchannel ( ) )
+		{
 		
+		}
 		else
 			player.getchatchannel ( ).removemember ( player );
 		
 		channel.addmember ( player );
 		player.joinchatchannel ( channel );
-		admin.messge ( "You moved " + player.getname ( ) + " to the channel -> " + chatchannel.getname ( ) );
-		player.message ( "Admin moved you to the channel -> " + chatchannel.getname ( ) );
+		admin.messge ( "You moved " + player.getname ( ) + " to the channel, " + channel.getname ( ) );
+		player.message ( "Admin moved you to the channel -> " + channel.getname ( ) );
 		return true;
 	}
 };

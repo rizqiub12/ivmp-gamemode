@@ -28,6 +28,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// THE ACCOUNTHANDLER CLASS IS A MEMBER VARIABLE OF THE SERVER INSTANCE. THIS CLASS ONLY HAS A SINGLE INSTANCE AND ACTS AS THE INTERFACE WHICH FOR ALL ACCOUNT INSTANCES.
+
 class AccountHandler
 {
 
@@ -35,7 +37,8 @@ class AccountHandler
 	
 	constructor ( )
 	{		
-		if ( SERVER.getconfig ( ).acctype.tointeger ( ) == 0 )
+		local _type = SERVER.getconfig ( ).acctype.tointeger ( );
+		if ( _type == 0 )
 		{
 			local usertable = SERVER.getconfig ( ).usertable;
 			local grouptable = SERVER.getconfig ( ).grouptable;
@@ -72,15 +75,15 @@ class AccountHandler
 				] );
 			}
 		}
-		else if ( SERVER.getconfig ( ).acctype.tointeger ( ) == 1 )
+		else if ( _type == 1 )
 		{
 		
 		}
-		else if ( SERVER.getconfig ( ).acctype.tointeger ( ) == 2 )
+		else if ( _type == 2 )
 		{
-		
+			
 		}
-		else if ( SERVER.getconfig ( ).acctype.tointeger ( ) == 3 )
+		else if ( _type == 3 )
 		{
 		
 		}
@@ -88,22 +91,79 @@ class AccountHandler
 	
 	function initaccounts ( )
 	{
-		local accounts = sql.query_assoc ( "SELECT * FROM " + SERVER.getconfig ( ).usertable );
-		foreach ( account in accounts )
+		local _type = SERVER.getconfig ( ).acctype.tointeger ( );
+		log ( _type.tostring ( ) );
+		if ( _type == 0 )
 		{
-			local stats = sql.query_assoc ( "SELECT * FROM " + SERVER.getconfig ( ).statstable + " WHERE id = " + account.id.tointeger ( ) + "" );
-			if ( !stats )
+			local accounts = sql.query_assoc ( "SELECT * FROM " + SERVER.getconfig ( ).usertable );
+			foreach ( account in accounts )
 			{
-				stats = {
-					kills = 0,
-					deaths = 0,
-					killstreak = 0,
-					money = 0
-				};
+				local stats = sql.query_assoc ( "SELECT * FROM " + SERVER.getconfig ( ).statstable + " WHERE id = " + account.id.tointeger ( ) + "" );
+				if ( !stats )
+				{
+					stats = {
+						kills = 0,
+						deaths = 0,
+						killstreak = 0,
+						money = 0
+					};
+				}
+				addaccount ( account, stats[0] );
 			}
-			addaccount ( account, stats );
 		}
-		return true;
+		else if ( _type == 1 )
+		{	
+			local d = Directory ( );
+			foreach ( idx, filename in d.getDirectory ( "../files/accounts/" ) ) 
+			{
+				local xfile = xml ( "accounts/" + filename );
+				xfile.nodeFind ( "userdata" );
+				local account = { };
+				account.username <- xfile.nodeAttribute ( "username" );
+				account.password <- xfile.nodeAttribute ( "password" );
+				account.ivmpserial <- xfile.nodeAttribute ( "serial" );
+				account.ip <- xfile.nodeAttribute ( "ip" );
+				account.id <- xfile.nodeAttribute ( "id" ).tointeger ( );
+				account.admin <- xfile.nodeAttribute ( "admin" ).tointeger ( );
+				account.salt <- xfile.nodeAttribute ( "salt" );		
+				account.usergroup <- xfile.nodeAttribute ( "usergroup " ).tointeger ( );
+				account.timeplayed <- xfile.nodeAttribute ( "timeplayed" ).tointeger ( );
+				addaccount ( account );
+			}
+		}
+		else if ( _type == 2 )
+		{
+			local d = Directory ( );
+			foreach ( idx, filename in d.getDirectory ( "../files/accounts/" ) ) 
+			{
+				local ini = EasyINI ( "/accounts/" + filename );
+				local account = { };
+				local stats = { };
+				
+				account.username <- ini.getKey ( "userdata", "username" ),
+				account.password <- ini.getKey ( "userdata", "password" );
+				account.ivmpserial <- ini.getKey ( "userdata", "serial" );
+				account.ip <- ini.getKey ( "userdata", "ip" );
+				account.id <- ini.getKey ( "userdata", "id" );
+				account.admin <- ini.getKey ( "userdata", "admin" );
+				account.salt <- ini.getKey ( "userdata", "salt" );
+				account.usergroup <- ini.getKey ( "userdata", "usergroup" );
+				account.timeplayed <- ini.getKey ( "userdata", "timeplayed" );
+				
+				stats.kills <- ini.getKey ( "userstats", "kills" );
+				stats.killstreak <- ini.getKey ( "userstats", "killstreak" );
+				stats.deaths <- ini.getKey ( "userstats", "deaths" );
+				stats.money <- ini.getKey ( "userstats", "money" );
+				stats.exp <- ini.getKey ( "userstats", "exp" );
+				stats.racewins <- ini.getKey ( "userstats", "racewins" );
+				
+				addaccount ( account, stats );
+			}
+		}
+		else if ( _type == 3 )
+		{
+		
+		}
 	}
 	
 	function getaccounts ( )
@@ -139,26 +199,70 @@ class AccountHandler
 	
 	function insertaccount ( username, pass, serial, ip )
 	{
-	
+		local _type = SERVER.getconfig ( ).acctype.tointeger ( );
 		local hashed;
 		if ( SERVER.getconfig ( ).acctype == 0 )
 			hashed = SERVER.util.hashforpass ( pass );
 
 		local t = {
-			username = sql.escape ( username.tostring ( ) ), 
-			password = hashed[0].tostring ( ),
-			salt = hashed[1].tostring ( ),
-			ivmpserial = sql.escape ( serial.tostring ( ) ), 
-			ip = sql.escape ( ip.tostring ( ) ),
-			id = false,
-			ivmpusergroup = 1,
-			admin = 0
+			username = username.tostring ( ), 
+			password = pass.tostring ( ),
+			salt = "",
+			ivmpserial = serial.tostring ( ), 
+			ip = ip.tostring ( ),
+			id = mt_accounts.len ( ).tostring ( ),
+			usergroup = 1,
+			admin = 0,
+			timeplayed = 0
 		};
-		
-		t.id = sql.query_insertid ( "INSERT into " + SERVER.getconfig ( ).usertable + " ( username, password, serial, ip, salt ) VALUES ( '" + t.username + "', '" + t.password + "', '" + t.serial + "', '" + t.ip + "', '" + t.salt + "' )" );
-		if ( !t.id )
-			return false;
-		local result_2 = sql.query_insertid ( "INSERT into " + SERVER.getconfig ( ).statstable + " ( exp ) VALUES ( 0 )" );
+
+		if ( _type == 0 )
+		{
+			t.id = sql.query_insertid ( "INSERT into " + SERVER.getconfig ( ).usertable + " ( username, password, serial, ip, salt ) VALUES ( '" + sql.esacpe ( t.username ) + "', '" + sql.escape ( t.password ) + "', '" + t.serial + "', '" + t.ip + "', '" + t.salt + "' )" );
+			if ( !t.id )
+				return false;
+			local result_2 = sql.query_insertid ( "INSERT into " + SERVER.getconfig ( ).statstable + " ( exp ) VALUES ( 0 )" );
+		}
+		else if ( _type == 1 )
+		{
+			local xfile = xml ( "accounts/accounts.xml" );
+			xfile.nodeFind ( "accounts" );
+			xfile.nodeFirstChild ( );
+			xfile.nodeNew ( true, "account" );
+			xfile.nodeSetAttribute ( "id", t.id );
+			xfile.nodeSetAttribute ( "username", t.username );
+			xfile.nodeSetAttribute ( "password", t.password );
+			xfile.nodeSetAttribute ( "admin", t.admin.tostring ( ) );
+			xfile.nodeSetAttribute ( "serial", t.ivmpserial );
+			xfile.nodeSetAttribute ( "salt", t.salt );
+			xfile.nodeSetAttribute ( "ip", t.ip );
+			xfile.nodeSetAttribute ( "usergroup", t.usergroup.tostring ( ) );
+			xfile.nodeSetAttribute ( "timeplayed", t.timeplayed.tostring ( ) );
+			xfile.nodeRoot ( );
+			xfile.save ( );
+		}
+		else if ( _type == 2 )
+		{
+			local ini = EasyINI ( "accounts/" + t.username + ".account" );
+			ini.setKey ( "userdata", "username", t.username );
+			ini.setKey ( "userdata", "password", t.password );
+			ini.setKey ( "userdata", "admin", t.admin.tostring ( ) );
+			ini.setKey ( "userdata", "serial", t.ivmpserial );
+			ini.setKey ( "userdata", "salt", t.salt );
+			ini.setKey ( "userdata", "ip", t.ip );
+			ini.setKey ( "userdata", "id", t.id );
+			ini.setKey ( "userdata", "usergroup", t.usergroup.tostring ( ) );
+			ini.setKey ( "userdata", "timeplayed", t.timeplayed.tostring ( ) );
+			
+			ini.setKey ( "userstats", "kills", "0" );
+			ini.setKey ( "userstats", "deaths", "0" );
+			ini.setKey ( "userstats", "killstreak", "0" );
+			ini.setKey ( "userstats", "money", "0" );
+			ini.setKey ( "userstats", "exp", "0" );
+			ini.setKey ( "userstats", "racewins", "0" );
+			ini.saveData ( );
+		}
+
 		local account = addaccount ( t );
 		callEvent ( "accountCreate", account );
 		return account;
@@ -180,7 +284,7 @@ class Account extends Element
 	timeplayed = 0;
 	stats = { kills = 0, deaths = 0, killstreak = 0, money = 0, exp = 0, racewins = 0 };
 	
-	constructor ( account, stat )
+	constructor ( account, t )
 	{
 		this.id = account.id;
 		ms_username = account.username;
@@ -192,14 +296,13 @@ class Account extends Element
 		this.salt = account.salt;
 		this.timeplayed = account.timeplayed;
 		this.type = "account";
-		if ( stat != false )
+		if ( t != false )
 		{
-			local t = stat[0];
-			this.stats.kills = t.kills;
-			this.stats.deaths = t.deaths;
-			this.stats.killstreak = t.killstreak;
-			this.stats.exp = t.exp;
-			this.stats.racewins = t.racewins;
+			this.stats.kills = t.kills.tointeger ( );
+			this.stats.deaths = t.deaths.tointeger ( );
+			this.stats.killstreak = t.killstreak.tointeger ( );
+			this.stats.exp = t.exp.tointeger ( );
+			this.stats.racewins = t.racewins.tointeger ( );
 		}
 	}
 	
@@ -216,11 +319,28 @@ class Account extends Element
 	
 	function setpassword ( newpass )
 	{
-		local pass = SERVER.util.has ( newpass );
-		local result = sql.query_assoc ( "UPDATE " + SERVER.getconfig ( ).usertable + " SET password = '" + pass[0] + "', salt = '" + pass[1] + "' WHERE `id` = " + this.id + "" );
-		if ( result )
+		local _type = SERVER.getconfig ( ).acctype.tointeger ( );
+		local pass = SERVER.util.hashforpass ( newpass );
+		if ( _type == 0 )
 		{
-			this.ms_password = pass;
+			local result = sql.query_assoc ( "UPDATE " + SERVER.getconfig ( ).usertable + " SET password = '" + pass[0] + "', salt = '" + pass[1] + "' WHERE `id` = " + this.id + "" );
+			if ( result )
+			{
+				this.ms_password = pass;
+				return true;
+			}
+		}
+		else if ( _type == 1 )
+		{
+			
+		}
+		else if ( _type == 2 )
+		{
+			local ini = EasyINI ( "accounts/" + this.ms_username + ".account" );
+			ini.setKey ( "userdata", "password", pass[0] );
+			ini.setKey ( "userdata", "salt", pass[1] );
+			ini.saveData ( );
+			this.ms_password = pass[0];
 			return true;
 		}
 		return false;
@@ -228,12 +348,31 @@ class Account extends Element
 	
 	function updateaccount ( )
 	{
-		local result = sql.query_assoc ( "UPDATE " + SERVER.getconfig ( ).usertable + " SET timeplayed = " + this.timeplayed + " WHERE `id` = " + this.id + "" );
-		if ( result )
+		local _type = SERVER.getconfig ( ).acctype.tointeger ( );
+		if ( _type == 0 )
 		{
-			result = sql.query_assoc ( "UPDATE " + SERVER.getconfig ( ).statstable + " SET kills = " + this.stats.kills + ", deaths = " + this.stats.deaths + ", killstreak = " + this.stats.killstreak + ", money = " + this.stats.money + ", exp = " + this.stats.exp + ", racewins = " + this.stats.racewins + " WHERE `id` = " + this.id + "" );
+			local result = sql.query_assoc ( "UPDATE " + SERVER.getconfig ( ).usertable + " SET timeplayed = " + this.timeplayed + " WHERE `id` = " + this.id + "" );
 			if ( result )
-				return true;
+			{
+				result = sql.query_assoc ( "UPDATE " + SERVER.getconfig ( ).statstable + " SET kills = " + this.stats.kills + ", deaths = " + this.stats.deaths + ", killstreak = " + this.stats.killstreak + ", money = " + this.stats.money + ", exp = " + this.stats.exp + ", racewins = " + this.stats.racewins + " WHERE `id` = " + this.id + "" );
+				if ( result )
+					return true;
+			}
+		}
+		else if ( _type == 1 )
+		{
+		
+		}
+		else if ( _type == 2 )
+		{
+			local ini = EasyINI ( "accounts/" + this.ms_username + ".account" );
+			ini.setKey ( "userstats", "kills", this.stats.kills.tostring ( ) );
+			ini.setKey ( "userstats", "deaths", this.statsdeaths.tostring ( ) );
+			ini.setKey ( "userstats", "killstreak", this.stats.killstreak.tostring ( ) );
+			ini.setKey ( "userstats", "money", this.stats.money.tostring ( ) );
+			ini.setKey ( "userstats", "exp", this.stats.exp.tostring ( ) );
+			ini.setKey ( "userstats", "racewins", this.stats.racewins.tostring ( ) );
+			ini.saveData ( );
 		}
 		return false;
 	}

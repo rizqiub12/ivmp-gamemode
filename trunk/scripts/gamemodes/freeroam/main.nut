@@ -89,11 +89,10 @@ registerCommand ( "createvehicle",
 			data.pos = player.getposition ( );
 			
 		local vehicle = SERVER.getworld ( ).maphandler.getdefault ( ).addelement ( "vehicle", data );
-		player.entervehicle ( vehicle );
+		//player.entervehicle ( vehicle );
 		player.message ( player.getname ( ) + " has spawned a " + getVehicleName ( data.model ), Gray );
 		
-	},
-	1
+	}
 );
 
 registerCommand ( "startengine", 
@@ -108,8 +107,7 @@ registerCommand ( "startengine",
 		
 		local vehicle = player.getvehicle ( );
 		vehicle.startengine ( );		
-	},
-	1
+	}
 );
 
 registerCommand ( "stopengine", 
@@ -124,8 +122,7 @@ registerCommand ( "stopengine",
 		
 		local vehicle = player.getvehicle ( );
 		vehicle.stopengine ( );		
-	},
-	1
+	}
 );
 
 registerCommand ( "setcolor",
@@ -139,8 +136,7 @@ registerCommand ( "setcolor",
 			return player.messge ( "Use /setcolor [c1] [c2] [c3] [c4]" );
 		
 		return vehicle.setcolor ( params[0].tointeger ( ), params[1].tointeger ( ), params[2].tointeger ( ), params[3].tointeger ( ) );
-	},
-	1
+	}
 );
 
 registerCommand ( "weapon",
@@ -155,8 +151,7 @@ registerCommand ( "weapon",
 		player.giveweapon ( weaponid, ammo );
 		player.message ( "You gave yourself a " + getWeaponName ( weaponid ) + " with " + ammo + " rounds of ammo.", Gray );
 		return true;
-	},
-	1
+	}
 );
 
 registerCommand ( "setskin",
@@ -170,8 +165,7 @@ registerCommand ( "setskin",
 		player.setskin ( skinid );
 		player.message ( "You changed your skin to " + params[0] +".", Gray );
 		return true;
-	},
-	1
+	}
 );
 
 registerCommand ( "kill",
@@ -179,8 +173,7 @@ registerCommand ( "kill",
 	{
 		player.kill ( );
 		return true;
-	},
-	0
+	}
 );
 
 registerCommand ( "setpos",
@@ -196,8 +189,7 @@ registerCommand ( "setpos",
 		player.setposition ( x, y, z );
 		player.message ( "You have warped to " + params[0] + ", " + params[1] + ", " + params[2] + ".", Gray );
 		return true;
-	},
-	1
+	}
 );
 
 registerCommand ( "pos", 
@@ -206,8 +198,7 @@ registerCommand ( "pos",
 		local pos = player.getposition ( );
 		player.message ( "Your location: " + pos[0].tostring ( ) + ", " + pos[1].tostring ( ) + ", " + pos[2].tostring ( ) + ".", Gray );
 		return true;
-	},
-	0
+	}
 );
 
 // TO DO: move to a mapeditor script
@@ -228,8 +219,7 @@ registerCommand ( "createspawn",
 			player.message ( "error", Red );
 			return false;
 		}
-	},
-	3
+	}
 );
 
 SERVER.getworld ( ).maphandler.loadmap ( "freeroam.map", true );
