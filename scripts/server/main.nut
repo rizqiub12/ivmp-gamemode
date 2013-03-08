@@ -28,13 +28,31 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
  
-/************************** #include **************************/
-dofile ( "scripts/server/mysql.nut" );
-dofile ( "scripts/server/variables.nut" );
+/************************** #include library **************************/
+dofile ( "scripts/library/mysql.nut" );
+dofile ( "scripts/library/variables.nut" );
+dofile ( "scripts/library/easyini.nut" );
+dofile ( "scripts/library/crypto.nut" );
+dofile ( "scripts/library/directory.nut" );
+dofile ( "scripts/library/math.nut" );
+
+/************************** #include server **************************/
 dofile ( "scripts/server/runcode.nut" );
-dofile ( "scripts/server/math.nut" );
 dofile ( "scripts/server/classes.nut" );
 dofile ( "scripts/server/functions.nut" );
 dofile ( "scripts/server/events.nut" );
 
 SERVER <- Server ( );
+
+function loadMYSQL ( )
+{
+	if ( SERVER.getconfig ( ).acctype.tointeger ( ) == 0 )
+	{
+		sql = mysql ( SERVER.getconfig ( ).ip, SERVER.getconfig ( ).user, SERVER.getconfig ( ).pass, SERVER.getconfig ( ).db );
+	}
+	else
+	{
+	
+	}
+	return true;
+}

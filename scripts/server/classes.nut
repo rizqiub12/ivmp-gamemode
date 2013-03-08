@@ -128,45 +128,14 @@ class Utility
 	function hashforpass ( string, salt = false )
 	{
 		local str = "";
-		
-		// default, no forums integration
-		if ( SERVER.getconfig ( ).acctype == 0 )
-		{
-			if ( !salt )
-				salt = randomstring ( 10 );
+		if ( !salt )
+			salt = randomstring ( 10 );
 			
-			str = md5 ( str );
-			str = str.tolower ( ) + salt;
-			str = md5 ( str ).tolower ( );
+		str = md5 ( str );
+		str = str.tolower ( ) + salt.tolower ( );
+		str = md5 ( str ).tolower ( );
 			
-			return [ str, salt ];
-		}
-		// phpBB integration
-		else if ( SERVER.getconfig ( ).acctype == 1 )
-		{
-			return [ str, salt ];
-		}
-		
-		// vBulletin integration
-		else if ( SERVER.getconfig ( ).acctype == 2 )
-		{
-			if ( !salt )
-				salt = randomstring ( 10 );
-				
-			str = md5 ( str );
-			str = str.tolower ( ) + salt;
-			str = md5 ( str ).tolower ( );
-			
-			return [ str, salt ];
-		}
-		
-		// IPB integration
-		else if ( SERVER.getconfig ( ).acctype == 3 )
-		{
-			return [ str, salt ];
-		}
-		else
-			return [ str, salt ];
+		return [ str, salt ];
 	}
 };
 
@@ -277,7 +246,7 @@ class Server
 		
 		// Load chatserver settings filename
 		xfile.nodeFind ( "accounts" );
-		config.acctype <- xfile.nodeContent (  ).tointeger ( );
+		config.acctype <- xfile.nodeAttribute ( "type" ).tointeger ( );
 		if ( config.acctype == 0 )
 		{
 			// Load database connection settings
@@ -294,9 +263,11 @@ class Server
 		}
 		else if ( config.acctype == 1 )
 		{
-			xfile.nodeFind ( "xmlfile" );
-			config.xmlfile <- xfile.nodeContent ( );
-			xfile.nodeParent ( );
+		
+		}
+		else if ( config.acctype == 2 )
+		{
+		
 		}
 		xfile.nodeParent ( );
 		
@@ -468,9 +439,13 @@ class Server
 	
 	function initusergroups ( )
 	{
-		local usergroups = sql.query_assoc ( "SELECT * FROM " + SERVER.getconfig ( ).grouptable );
-		foreach ( group in usergroups )
-			usergrouphandler.push ( Usergroup ( group ) );
+		local _type = SERVER.getconfig ( ).acctype.tointeger ( );
+		if ( _type == 0 )
+		{
+			local usergroups = sql.query_assoc ( "SELECT * FROM " + SERVER.getconfig ( ).grouptable );
+			foreach ( group in usergroups )
+				usergrouphandler.push ( Usergroup ( group ) );
+		}
 	}
 	
 	function getusergroup ( groupname )

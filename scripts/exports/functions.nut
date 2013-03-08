@@ -62,7 +62,7 @@ function registerCommand ( commandname, handler )
 	return true;
 }
 
-/*function isElement ( element )
+function isElement ( element )
 {
 	if ( !element.type )
 		return false;
@@ -109,14 +109,14 @@ function registerCommand ( commandname, handler )
 			return false;
 	}
 	return false;
-}*/
+}
 
-function isElement ( element )
+/*function isElement ( element )
 {
-	if ( element.instanceof ( Element );
+	if ( element.instanceof ( ) == Element );
 		return true;
 	return false;
-}
+}*/
 
 function createElement ( element_type, a = false, b = false, c = false, d = false, e = false, f = false, g = false, h = false )
 {

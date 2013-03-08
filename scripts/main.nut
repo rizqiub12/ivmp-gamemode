@@ -32,7 +32,8 @@
 dofile ( "scripts/server/main.nut" );
 
 /************************** #connect **************************/
-sql <- mysql ( SERVER.getconfig ( ).ip, SERVER.getconfig ( ).user, SERVER.getconfig ( ).pass, SERVER.getconfig ( ).db );
+sql <- false;
+loadMYSQL ( );
 
 /************************** #include **************************/
 dofile ( "scripts/elements/main.nut" );
