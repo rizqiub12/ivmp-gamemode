@@ -92,7 +92,6 @@ class AccountHandler
 	function initaccounts ( )
 	{
 		local _type = SERVER.getconfig ( ).acctype.tointeger ( );
-		log ( _type.tostring ( ) );
 		if ( _type == 0 )
 		{
 			local accounts = sql.query_assoc ( "SELECT * FROM " + SERVER.getconfig ( ).usertable );
@@ -200,17 +199,15 @@ class AccountHandler
 	function insertaccount ( username, pass, serial, ip )
 	{
 		local _type = SERVER.getconfig ( ).acctype.tointeger ( );
-		local hashed;
-		if ( SERVER.getconfig ( ).acctype == 0 )
-			hashed = SERVER.util.hashforpass ( pass );
-
+		local hashed = SERVER.util.hashforpass ( pass );
+		local n = mt_accounts.len ( ) + 1;
 		local t = {
 			username = username.tostring ( ), 
-			password = pass.tostring ( ),
-			salt = "",
+			password = hashed[0].tostring ( ),
+			salt = hashed[1],
 			ivmpserial = serial.tostring ( ), 
 			ip = ip.tostring ( ),
-			id = mt_accounts.len ( ).tostring ( ),
+			id = n.tostring ( ),
 			usergroup = 1,
 			admin = 0,
 			timeplayed = 0
