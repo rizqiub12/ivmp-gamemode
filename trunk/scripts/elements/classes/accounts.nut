@@ -34,6 +34,7 @@ class AccountHandler
 {
 
 	mt_accounts = [ ];
+	_sqlite = false;
 	
 	constructor ( )
 	{		
@@ -85,7 +86,8 @@ class AccountHandler
 		}
 		else if ( _type == 3 )
 		{
-		
+			_sqlite = sqlite_open ( "files/accounts/accounts.db" );
+			//sqlite_query ( _sqlite, "CREATE TABLE users ( id int, username varchar ( 32 ), password varchar ( 32 ), salt varchar ( 12 ), serial varchar ( 32 ), ip varchar ( 32 ), email varchar ( 64 ), timeplayed int, usergroup int, admin int )" );
 		}
 	}
 	
@@ -99,15 +101,9 @@ class AccountHandler
 			{
 				local stats = sql.query_assoc ( "SELECT * FROM " + SERVER.getconfig ( ).statstable + " WHERE id = " + account.id.tointeger ( ) + "" );
 				if ( !stats )
-				{
-					stats = {
-						kills = 0,
-						deaths = 0,
-						killstreak = 0,
-						money = 0
-					};
-				}
-				addaccount ( account, stats[0] );
+					addaccount ( account, { kills = 0, deaths = 0, killstreak = 0, money = 0, exp = 0, racewins = 0 } );
+				else
+					addaccount ( account, stats[0] );
 			}
 		}
 		else if ( _type == 1 )
@@ -118,10 +114,12 @@ class AccountHandler
 				local xfile = xml ( "accounts/" + filename );
 				xfile.nodeFind ( "userdata" );
 				local account = { };
+				
 				account.username <- xfile.nodeAttribute ( "username" );
 				account.password <- xfile.nodeAttribute ( "password" );
 				account.ivmpserial <- xfile.nodeAttribute ( "serial" );
 				account.ip <- xfile.nodeAttribute ( "ip" );
+				account.email <- xfile.nodeAttribute ( "email" );
 				account.id <- xfile.nodeAttribute ( "id" ).tointeger ( );
 				account.admin <- xfile.nodeAttribute ( "admin" ).tointeger ( );
 				account.salt <- xfile.nodeAttribute ( "salt" );		
@@ -143,6 +141,7 @@ class AccountHandler
 				account.password <- ini.getKey ( "userdata", "password" );
 				account.ivmpserial <- ini.getKey ( "userdata", "serial" );
 				account.ip <- ini.getKey ( "userdata", "ip" );
+				account.email <- ini.getKey ( "userdata", "email" );
 				account.id <- ini.getKey ( "userdata", "id" );
 				account.admin <- ini.getKey ( "userdata", "admin" );
 				account.salt <- ini.getKey ( "userdata", "salt" );
@@ -161,7 +160,26 @@ class AccountHandler
 		}
 		else if ( _type == 3 )
 		{
-		
+			local result = sqlite_query ( _sqlite, "SELECT * from users" );
+			
+			local tmp = true;
+			while ( tmp == true )
+			{
+				local account = { };
+				account.id <- sqlite_column_data ( result, 0, 0 );
+				account.username <- sqlite_column_data ( result, 1, 0 );
+				account.password <- sqlite_column_data ( result, 2, 0 );
+				account.salt <- sqlite_column_data ( result, 3, 0 );
+				account.ivmpserial <- sqlite_column_data ( result, 4, 0 );
+				account.ip <- sqlite_column_data ( result, 5, 0 );
+				account.email <- sqlite_column_data ( result, 6, 0 );
+				account.timeplayed <- sqlite_column_data ( result, 7, 0 );
+				account.usergroup <- sqlite_column_data ( result, 8, 0 );
+				account.admin <- sqlite_column_data ( result, 9, 0 );
+				addaccount ( account );
+				tmp = sqlite_next_row ( result );
+			}
+			sqlite_free ( result );
 		}
 	}
 	
@@ -210,7 +228,8 @@ class AccountHandler
 			id = n.tostring ( ),
 			usergroup = 1,
 			admin = 0,
-			timeplayed = 0
+			timeplayed = 0,
+			email = "none"
 		};
 
 		if ( _type == 0 )
@@ -233,6 +252,7 @@ class AccountHandler
 			xfile.nodeSetAttribute ( "serial", t.ivmpserial );
 			xfile.nodeSetAttribute ( "salt", t.salt );
 			xfile.nodeSetAttribute ( "ip", t.ip );
+			xfile.nodeSetAttribute ( "email", t.email );
 			xfile.nodeSetAttribute ( "usergroup", t.usergroup.tostring ( ) );
 			xfile.nodeSetAttribute ( "timeplayed", t.timeplayed.tostring ( ) );
 			xfile.nodeRoot ( );
@@ -248,6 +268,7 @@ class AccountHandler
 			ini.setKey ( "userdata", "salt", t.salt );
 			ini.setKey ( "userdata", "ip", t.ip );
 			ini.setKey ( "userdata", "id", t.id );
+			ini.setKey ( "userdata", "email", t.email );
 			ini.setKey ( "userdata", "usergroup", t.usergroup.tostring ( ) );
 			ini.setKey ( "userdata", "timeplayed", t.timeplayed.tostring ( ) );
 			
@@ -257,7 +278,12 @@ class AccountHandler
 			ini.setKey ( "userstats", "money", "0" );
 			ini.setKey ( "userstats", "exp", "0" );
 			ini.setKey ( "userstats", "racewins", "0" );
+			
 			ini.saveData ( );
+		}
+		else if ( _type == 3 )
+		{
+			local result = sqlite_query ( _sqlite, "INSERT INTO users ( id, username, password, salt, serial, ip, email, timeplayed, usergroup, admin ) VALUES ( " + t.id.tointeger ( ) + ", '" + t.username + "', '" + t.password + "', '" + t.salt + "', '" + t.ivmpserial + "', '" + t.ip + "', '" + t.email + "', " + t.timeplayed.tointeger ( ) + ", " + t.usergroup.tointeger ( ) + ", " + t.admin.tointeger ( ) + " )" );
 		}
 
 		local account = addaccount ( t );
@@ -300,6 +326,7 @@ class Account extends Element
 			this.stats.killstreak = t.killstreak.tointeger ( );
 			this.stats.exp = t.exp.tointeger ( );
 			this.stats.racewins = t.racewins.tointeger ( );
+			this.stats.money = t.money.tointeger ( );
 		}
 	}
 	
