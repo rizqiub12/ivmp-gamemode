@@ -351,6 +351,7 @@ class Account extends Element
 			if ( result )
 			{
 				this.ms_password = pass;
+				this.salt = pass[1];
 				return true;
 			}
 		}
@@ -365,7 +366,15 @@ class Account extends Element
 			ini.setKey ( "userdata", "salt", pass[1] );
 			ini.saveData ( );
 			this.ms_password = pass[0];
+			this.salt = pass[1];
 			return true;
+		}
+		else if ( _type == 2 )
+		{
+			local result = sqlite_query ( SERVER.getaccounthandler ( )._sqlite, "UPDATE user SET password = '" + pass[0] + "', salt = '" + pass[1] + "' WHERE
+			username = '" + ms_username + "'" );
+			this.ms_password = pass[0];
+			this.salt = pass[1];
 		}
 		return false;
 	}
