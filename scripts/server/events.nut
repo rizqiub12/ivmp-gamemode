@@ -93,6 +93,12 @@ function onClientRequestData ( playerid )
 	return true;
 }
 
+function onKeyPress ( )
+{
+
+}
+
+addEvent ( "keyPress", onKeyPress );
 addEvent ( "consoleInput", onConsoleInput );
 addEvent ( "scriptInit", onScriptInit );
 addEvent ( "serverRecieve", onServerRecieve );

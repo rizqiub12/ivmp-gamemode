@@ -306,6 +306,7 @@ class Account extends Element
 	salt = false;
 	timeplayed = 0;
 	stats = { kills = 0, deaths = 0, killstreak = 0, money = 0, exp = 0, racewins = 0 };
+	profile = false;
 	
 	constructor ( account, t )
 	{
@@ -319,6 +320,7 @@ class Account extends Element
 		this.salt = account.salt;
 		this.timeplayed = account.timeplayed;
 		this.type = "account";
+		this.profile = Profile ( this );
 		if ( t != false )
 		{
 			this.stats.kills = t.kills.tointeger ( );
@@ -453,6 +455,65 @@ class Account extends Element
 	function getip ( )
 	{
 		return mi_ip;
+	}
+	
+};
+
+class Profile
+{
+	
+	account = false;
+	badges = [ 
+		// ID = 0, This badge is given after 1 hour of time played in server.
+		{ name = "First Hour", state = false }
+	];
+	friends = [ ];
+	status = "";
+	clan = false;
+	social = { twitter = false, facebook = false };
+	
+	constructor ( account, data )
+	{
+		this.account = account;
+	}
+	
+	function addbadge ( badgeid )
+	{
+		local badge = this.badges[ badgeid ];
+		if ( badge )
+		{
+			badge.state = true;
+			return true;
+		}
+		return false;
+	}
+	
+	function countbadges ( )
+	{
+		local i = 0;
+		foreach ( badge in badges )
+		{
+			if ( badge.state == true )
+				i++;
+		}
+		return i;
+	}
+	
+	function setstatus ( text )
+	{
+		if ( typeof ( text ) != "string" )
+			return false;
+			
+		this.status = text;
+		return true;
+	}
+	
+	function addfriend ( account )
+	{
+		local f = this.friends.find ( account.getid ( ) );
+		if ( f )
+			return false;
+		return this.friends.push ( account.getid ( ) );
 	}
 	
 };
